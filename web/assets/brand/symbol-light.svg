@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" fill="none" aria-hidden="true">
+  <!-- TOP DOT -->
+  <circle cx="48" cy="18" r="6" fill="#F8FAFC" />
+  <!-- TOP PLATFORM -->
+  <g>
+    <!-- left half -->
+    <path d="M38 30 L48 36 L48 40 L38 34 Z" fill="#94A3B8" />
+    <!-- right half -->
+    <path d="M48 36 L58 30 L58 34 L48 40 Z" fill="#F8FAFC" />
+  </g>
+  <!-- MIDDLE PLATFORM -->
+  <g>
+    <!-- left half -->
+    <path d="M30 42 L48 52 L48 58 L30 48 Z" fill="#94A3B8" />
+    <!-- right half -->
+    <path d="M48 52 L66 42 L66 48 L48 58 Z" fill="#F8FAFC" />
+  </g>
+  <!-- BOTTOM PLATFORM -->
+  <g>
+    <!-- left half -->
+    <path d="M22 58 L48 72 L48 80 L22 66 Z" fill="#94A3B8" />
+    <!-- right half -->
+    <path d="M48 72 L74 58 L74 66 L48 80 Z" fill="#F8FAFC" />
+  </g>
+</svg>

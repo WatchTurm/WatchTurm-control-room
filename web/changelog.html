@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>WatchTurm Control Room - Changelog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="assets/brand/symbol-favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./styles.css?v=2026-01-20-03" />
+  <style>
+    html, body { height: auto !important; overflow: auto !important; }
+    body { padding: 40px; max-width: 800px; margin: auto; }
+    h1 { margin-bottom: 4px; }
+    .subtitle { opacity: 0.7; margin-bottom: 32px; }
+    .changelogEntry { margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .changelogEntry:last-child { border-bottom: none; }
+    .changelogDate { font-size: 13px; opacity: 0.7; margin-bottom: 4px; }
+    .changelogTitle { font-weight: 600; margin-bottom: 6px; }
+    .changelogDesc { font-size: 14px; opacity: 0.9; line-height: 1.5; }
+    .credits { margin-top: 48px; font-size: 13px; opacity: 0.75; }
+    .credits a { color: var(--link); }
+    .footerNav { margin-top: 32px; font-size: 13px; }
+    .footerNav a { color: inherit; }
+    .footerNav a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <a href="./index.html" class="brand brandLink" style="display:inline-flex; margin-bottom:24px; width:auto;">
+    <div class="brand-logo logo-theme">
+      <svg class="logo-symbol" width="32" height="32" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+        <circle cx="48" cy="18" r="6" />
+        <path d="M38 30 L48 36 L58 30 L58 34 L48 40 L38 34 Z" />
+        <path d="M30 42 L48 52 L66 42 L66 48 L48 58 L30 48 Z" />
+        <path d="M22 58 L48 72 L74 58 L74 66 L48 80 L22 66 Z" />
+      </svg>
+    </div>
+    <div>
+      <div class="title">WatchTurm</div>
+      <div class="subtitle">Control Room</div>
+    </div>
+  </a>
+
+  <h1>Changelog</h1>
+  <div class="subtitle">Release history and notable updates</div>
+
+  <div class="changelogEntry">
+    <div class="changelogDate">11 February 2026</div>
+    <div class="changelogTitle">Open-source release</div>
+    <div class="changelogDesc">First public release of WatchTurm Control Room. GitHub, TeamCity, and Jira integrations. Snapshot generator, Release History, Ticket Tracker, Statistics, Runbooks, Environment details with compare. Setup guide for DevOps.</div>
+  </div>
+
+  <div class="changelogEntry">
+    <div class="changelogDate">2 February 2026</div>
+    <div class="changelogTitle">Runbooks: Scope &amp; drift checkers</div>
+    <div class="changelogDesc">Scope Checker and Drift Checker runbooks. Compare baseline vs default branch, detect changes not yet merged. Ticket prefix filtering, clickable commit URLs.</div>
+  </div>
+
+  <div class="changelogEntry">
+    <div class="changelogDate">22 January 2026</div>
+    <div class="changelogTitle">Statistics dashboard</div>
+    <div class="changelogDesc">Deployment frequency, lead time, top deployers per project and environment. Time window selector (7d / 30d). Deployment-focused analytics from release history.</div>
+  </div>
+
+  <div class="changelogEntry">
+    <div class="changelogDate">15 January 2026</div>
+    <div class="changelogTitle">Release History append-only</div>
+    <div class="changelogDesc">Enterprise storage format: index.json + events.jsonl. 60-day backfill from snapshot. Calendar view and advanced filters.</div>
+  </div>
+
+  <div class="changelogEntry">
+    <div class="changelogDate">8 January 2026</div>
+    <div class="changelogTitle">Ticket Tracker enhancements</div>
+    <div class="changelogDesc">Multi-PR ticket support, environment presence from deployments. Per-PR timelines for diverged rollouts. Jira summary and status integration.</div>
+  </div>
+
+  <div class="changelogEntry">
+    <div class="changelogDate">28 December 2025</div>
+    <div class="changelogTitle">Environment compare mode</div>
+    <div class="changelogDesc">Select up to 2 environments, see component version mismatches. Visual diff for tags, branches, builds. Inline quick links (CMS, frontends) per environment.</div>
+  </div>
+
+  <div class="changelogEntry">
+    <div class="changelogDate">18 December 2025</div>
+    <div class="changelogTitle">Snapshot engine core</div>
+    <div class="changelogDesc">GitHub + TeamCity + Jira integration. Kustomization discovery, component metadata, deployer info. Automated snapshot with scheduler.</div>
+  </div>
+
+  <div class="changelogEntry">
+    <div class="changelogDate">2 December 2025</div>
+    <div class="changelogTitle">Overview &amp; pipeline radar</div>
+    <div class="changelogDesc">Project slices (pizza wheel) with environment status. Click to expand details. Glass UI, dark &amp; light theme. JSON-driven data model.</div>
+  </div>
+
+  <div class="changelogEntry">
+    <div class="changelogDate">21 November 2025</div>
+    <div class="changelogTitle">Initial SPA structure</div>
+    <div class="changelogDesc">Lightweight single-page app. Left navigation: Overview, Platforms, Tools. Basic layout and routing. Exo 2 typography, responsive design.</div>
+  </div>
+
+  <div class="changelogEntry">
+    <div class="changelogDate">14 November 2025</div>
+    <div class="changelogTitle">Project kickoff</div>
+    <div class="changelogDesc">WatchTurm Control Room initiative started. Release management dashboard for multi-platform environments.</div>
+  </div>
+
+  <div class="credits">
+    Developed by <strong>Mateusz Zadrożny</strong> within the WatchTurm initiative and WatchTurm Control Room project.<br>
+    <a href="https://www.linkedin.com/company/watchturm" target="_blank" rel="noopener noreferrer">WatchTurm on LinkedIn</a>
+  </div>
+
+  <div class="footerNav">← <a href="./index.html">Back to Control Room</a></div>
+
+</body>
+</html>

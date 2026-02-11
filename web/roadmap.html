@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>WatchTurm Control Room - Roadmap</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Typography: Exo 2 (single global import) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- cache-bust: we tweak CSS a lot during MVP polish -->
+  <link rel="icon" href="assets/brand/symbol-favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./styles.css?v=2026-01-20-03" />
+  <style>
+    /* IMPORTANT: the main app stylesheet may set html/body overflow:hidden for the SPA.
+       For this standalone page we must allow scrolling. */
+    html, body {
+      height: auto !important;
+      overflow: auto !important;
+    }
+
+    body {
+      padding: 40px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    h1 { margin-bottom: 4px; }
+    .subtitle { opacity: 0.7; margin-bottom: 32px; }
+
+    .mvp { margin-bottom: 48px; }
+    .mvpHeader { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .done {
+      background: rgba(80, 200, 120, 0.15);
+      color: #7dffb3;
+      border: 1px solid rgba(80, 200, 120, 0.3);
+    }
+
+    .progress {
+      background: rgba(255, 200, 100, 0.15);
+      color: #ffd28a;
+      border: 1px solid rgba(255, 200, 100, 0.3);
+    }
+
+    .planned {
+      background: rgba(120, 160, 255, 0.15);
+      color: #b6c8ff;
+      border: 1px solid rgba(120, 160, 255, 0.3);
+    }
+
+    ul { margin-top: 12px; padding-left: 20px; }
+    li { margin-bottom: 6px; }
+
+    .note { margin-top: 12px; font-size: 13px; opacity: 0.65; }
+
+    .footerNav { margin-top: 64px; font-size: 13px; opacity: 0.85; }
+    .footerNav a { color: inherit; }
+    .footerNav a:hover { text-decoration: underline; }
+  </style>
+</head>
+
+<body>
+
+  <a href="./index.html" class="brand brandLink" style="display:inline-flex; margin-bottom:24px; width:auto;">
+    <div class="brand-logo logo-theme">
+      <svg class="logo-symbol" width="32" height="32" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+        <circle cx="48" cy="18" r="6" />
+        <path d="M38 30 L48 36 L58 30 L58 34 L48 40 L38 34 Z" />
+        <path d="M30 42 L48 52 L66 42 L66 48 L48 58 L30 48 Z" />
+        <path d="M22 58 L48 72 L74 58 L74 66 L48 80 L22 66 Z" />
+      </svg>
+    </div>
+    <div>
+      <div class="title">WatchTurm</div>
+      <div class="subtitle">Control Room</div>
+    </div>
+  </a>
+
+  <h1>WatchTurm Control Room</h1>
+  <div class="subtitle">
+    Roadmap &amp; Delivery History - Release Management dashboard for multi-platform environments
+  </div>
+
+  <section class="mvp">
+    <div class="mvpHeader">
+      <h2>Phase 1 - Foundation &amp; Visual Control Room</h2>
+      <span class="badge done">DONE</span>
+    </div>
+    <ul>
+      <li>Lightweight SPA architecture (HTML + CSS + JS)</li>
+      <li>Unified left navigation: Overview / Platforms / Tools / Admin</li>
+      <li>Overview dashboard with pipeline radar (DEV / QA / UAT / PROD)</li>
+      <li>Visual project slices with instant environment visibility</li>
+      <li>Glass UI design system (dark &amp; light theme, cards, spacing, typography)</li>
+      <li>JSON-driven data model powered by real snapshot</li>
+    </ul>
+  </section>
+
+  <section class="mvp">
+    <div class="mvpHeader">
+      <h2>Phase 2 - Interaction, State &amp; Release Reality</h2>
+      <span class="badge done">DONE</span>
+    </div>
+    <ul>
+      <li>Clickable environment tiles per project</li>
+      <li>Inline expandable environment quick links (CMS, FE/brands, ArgoCD, infra)</li>
+      <li>Environment details: component table with tags, branches, builds, deployers</li>
+      <li>Compare mode: select multiple environments, see mismatched versions</li>
+      <li>Right sidebar with documentation and alerts</li>
+      <li>Release History with per-project tables and tag-change events</li>
+      <li>Ticket Tracker with multi-PR scenarios and environment presence</li>
+      <li>Clear separation between Platforms (project views) and global Tools</li>
+    </ul>
+  </section>
+
+  <section class="mvp">
+    <div class="mvpHeader">
+      <h2>Phase 3 - Real-time Integrations &amp; Snapshot Engine</h2>
+      <span class="badge done">DONE</span>
+    </div>
+    <ul>
+      <li>GitHub integration: PRs, merges, branches, commit history</li>
+      <li>TeamCity integration: build metadata, triggered-by, branch info</li>
+      <li>ArgoCD integration: health &amp; sync status per environment</li>
+      <li>Jira integration: ticket status, summary, fix versions</li>
+      <li>Datadog integration: observability metrics, live proxy, health signals</li>
+      <li>Snapshot scheduler: automated background refresh with ETA tracking</li>
+      <li>Release History: append-only enterprise storage with 60-day backfill</li>
+      <li>Configuration wizard: admin panel for tenant setup and API tokens</li>
+    </ul>
+  </section>
+
+  <section class="mvp">
+    <div class="mvpHeader">
+      <h2>Phase 4 - Runbooks &amp; Operational Tools</h2>
+      <span class="badge progress">IN PROGRESS</span>
+    </div>
+    <ul>
+      <li><b>Scope Checker</b> - compare baseline branch vs default branch: tickets, commits, PRs</li>
+      <li><b>Drift Checker</b> - detect changes in release branch not yet in default branch</li>
+      <li><b>Release Diff</b> - compare two releases (e.g. 0.20.0 vs 0.21.0): added tickets &amp; commits per repo</li>
+      <li>Strikethrough for repos with missing branches (visual feedback)</li>
+      <li>Clickable commits URL to view changes on GitHub</li>
+      <li>Ticket prefix filtering (case-insensitive, comma-separated)</li>
+      <li>Input hints for all runbook configuration fields</li>
+      <li>More runbooks in development (readiness checks, promotion validators)</li>
+    </ul>
+    <div class="note">
+      Runbooks are actively developed. New runbooks will be added based on team feedback.
+    </div>
+  </section>
+
+  <section class="mvp">
+    <div class="mvpHeader">
+      <h2>Phase 5 - Statistics &amp; Reminders</h2>
+      <span class="badge done">DONE</span>
+    </div>
+    <ul>
+      <li>Statistics dashboard: deployment frequency, lead time, top deployers</li>
+      <li>Per-project and per-environment breakdown</li>
+      <li>Time window selector (7d / 30d / 90d)</li>
+      <li>Reminders &amp; Signals panel: stale deploy warnings, QA vs UAT diff hints</li>
+      <li>Deployment-focused alerts (no Datadog noise in reminders)</li>
+    </ul>
+  </section>
+
+  <section class="mvp">
+    <div class="mvpHeader">
+      <h2>Phase 6 - UI Polish &amp; Enterprise Ready</h2>
+      <span class="badge done">DONE</span>
+    </div>
+    <ul>
+      <li>Dark &amp; Light theme with consistent styling</li>
+      <li>Unified dropdowns, inputs, and buttons across the app</li>
+      <li>Navigation dividers for better visual hierarchy</li>
+      <li>Overview layout: balanced panels (radar, history, integrations)</li>
+      <li>Generic naming (no hardcoded company names in UI)</li>
+      <li>Responsive design for various screen sizes</li>
+    </ul>
+  </section>
+
+  <section class="mvp">
+    <div class="mvpHeader">
+      <h2>Phase 7 - Future Plans</h2>
+      <span class="badge planned">PLANNED</span>
+    </div>
+    <ul>
+      <li>Advanced runbooks: promotion validators, rollback checkers</li>
+      <li>Cross-project comparisons and benchmarks</li>
+      <li>Historical analytics and trend detection</li>
+      <li>Optional data export (CSV / JSON)</li>
+      <li>Webhook notifications for critical events</li>
+      <li>Role-based access (read-only by design, optional write actions)</li>
+    </ul>
+    <div class="note">
+      Future plans are indicative and may change based on team needs.
+    </div>
+  </section>
+
+  <div class="footerNav">
+    ← <a href="./index.html">Back to Control Room</a>
+  </div>
+
+</body>
+</html>

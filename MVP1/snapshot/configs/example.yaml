@@ -1,0 +1,34 @@
+# Generic example - copy to your-project.yaml and customize.
+# Replace your-org, example-api, etc. with your real GitHub org and repo names.
+
+project:
+  key: EXAMPLE
+  name: Example Project
+  githubOwner: your-org
+  infraRef: main
+
+environments:
+- key: dev
+  name: DEV
+- key: qa
+  name: QA
+- key: prod
+  name: PROD
+
+services:
+- key: example-api
+  codeRepo: example-api
+  infraRepo: example-api-infra
+  teamcityBuildTypeId: Example_Api_DockerBuildAndPush
+- key: example-frontend
+  codeRepo: example-frontend
+  infraRepo: example-frontend-infra
+  teamcityBuildTypeId: Example_Frontend_DockerBuildAndPush
+
+# Optional: runbook branching (for Scope/Drift Checker)
+runbooks:
+  branching:
+    defaultBranch: main
+    releaseBranchPatterns:
+      - "release/v\\d+\\.\\d+\\.\\d+"
+    releaseBranchPickStrategy: semver

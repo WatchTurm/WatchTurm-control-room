@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WatchTurm Control Room</title>
+  <!-- Favicons: dark + light variants -->
+  <link rel="icon" href="assets/brand/symbol-favicon.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="assets/brand/symbol-favicon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: light)" />
+  <!-- Fallback for older browsers -->
+  <link rel="icon" href="assets/brand/symbol-favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="assets/brand/symbol-favicon.svg" />
+  <!-- Typography: Exo 2 (single global import) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- cache-bust: we tweak CSS a lot during MVP polish -->
+  <link rel="stylesheet" href="./styles.css?v=2026-01-20-04" />
+</head>
+
+<body>
+  <div class="layout">
+    <!-- LEFT -->
+    <aside class="left" id="leftNav">
+<a class="brand brandLink" href="./changelog.html">
+  <div class="brand-logo logo-theme">
+    <svg class="logo-symbol" width="32" height="32" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+      <circle cx="48" cy="18" r="6" />
+      <path d="M38 30 L48 36 L58 30 L58 34 L48 40 L38 34 Z" />
+      <path d="M30 42 L48 52 L66 42 L66 48 L48 58 L30 48 Z" />
+      <path d="M22 58 L48 72 L74 58 L74 66 L48 80 L22 66 Z" />
+    </svg>
+  </div>
+  <div>
+    <div class="title">WatchTurm</div>
+    <div class="subtitle">Control Room</div>
+  </div>
+</a>
+
+
+      <div class="navSection">
+        <div class="navTitle">OVERVIEW</div>
+        <button class="navItem" id="navOverviewBtn" type="button">Overview</button>
+      </div>
+
+      <div class="navSection">
+        <div class="navTitle">PLATFORMS</div>
+        <div id="projectsList"></div>
+      </div>
+
+      <div class="navSection">
+        <div class="navTitle">TOOLS</div>
+        <button class="navItem" type="button" data-view="history">Release History</button>
+        <button class="navItem" type="button" data-view="ticket">Ticket Tracker</button>
+        <button class="navItem" type="button" data-view="stats">Statistics</button>
+        <button class="navItem" type="button" data-view="releases">Runbooks</button>
+      </div>
+
+      <div class="navSection" id="navSectionSetup">
+        <div class="navTitle">SETUP</div>
+        <button class="navItem" type="button" data-view="setup">Configuration guide</button>
+      </div>
+
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="mainScroll">
+      <div id="onboardingBanner" class="onboardingBanner hidden" aria-live="polite"></div>
+      <header class="topBar" id="topBar"></header>
+      <section class="block" id="overviewBlock">
+        <div class="blockTitle">OVERVIEW</div>
+        <div id="overviewContent"></div>
+      </section>
+
+      <section class="block view" id="releasesBlock">
+        <div class="blockTitle">RUNBOOKS</div>
+        <div id="releasesContent"></div>
+      </section>
+
+      <section class="block" id="envBlock">
+        <div class="blockTitle">ENVIRONMENTS</div>
+        <div class="envRow" id="envRow"></div>
+      </section>
+
+      <section class="block view" id="historyBlock" style="display:none">
+        <div class="blockTitle">RELEASE HISTORY</div>
+        <div id="historyContent"></div>
+      </section>
+
+      <section class="block view" id="statsBlock" style="display:none">
+        <div class="blockTitle">STATISTICS</div>
+        <div id="statsContent"></div>
+      </section>
+
+      <section class="block view" id="ticketBlock" style="display:none">
+        <div class="blockTitle">TICKET TRACKER</div>
+        <div id="ticketContent"></div>
+      </section>
+
+      <section class="block view" id="setupBlock" style="display:none">
+        <div class="blockTitle">SETUP</div>
+        <div id="setupContent"></div>
+      </section>
+
+      <section id="compareBar"></section>
+      <section id="compare"></section>
+      <section id="details"></section>
+
+      <footer id="appFooter" class="appFooter">
+        <a href="https://www.linkedin.com/company/watchturm" target="_blank" rel="noopener noreferrer">WatchTurm on LinkedIn</a> • Mateusz Zadrożny • Control Room
+      </footer>
+      </div>
+    </main>
+
+    <!-- RIGHT (overlay) -->
+    <aside class="right" id="sidebar" aria-hidden="true">
+      <div class="rightInner" id="rightInner"></div>
+    </aside>
+
+    <button class="sidebarToggle" id="sidebarToggle" aria-label="Toggle sidebar" type="button">›</button>
+  </div>
+
+  <script src="./admin-config.js?v=2026-01-28-02"></script>
+  <script src="./app.js?v=2026-01-28-02"></script>
+</body>
+</html>
