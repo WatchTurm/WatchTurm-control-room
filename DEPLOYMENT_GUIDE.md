@@ -1,33 +1,43 @@
-# Deployment Guide - WatchTurm Control Room
+ Deployment Guide – WatchTurm Control Room
 
-## Co to jest "dokumentacja deploymentu"?
-
-To instrukcje jak **wdrożyć aplikację WatchTurm Control Room na serwer produkcyjny** (nie deploymenty aplikacji, które aplikacja śledzi, tylko deployment samej aplikacji).
-
----
-
-## Wymagania
-
-- Python 3.8+
-- Node.js (opcjonalnie, dla frontend build tools)
-- Reverse proxy (nginx/Apache) - opcjonalnie
-- Systemd lub PM2 (dla uruchamiania jako service)
+This document explains how to **deploy the WatchTurm Control Room application itself** to a server (production or staging).  
+It does **not** describe the deployments that WatchTurm monitors; it’s about deploying the Control Room.
 
 ---
 
-## Krok 1: Przygotowanie serwera
+## 1. Requirements
 
-### 1.1 Instalacja zależności
+- **Python** 3.8+  
+- **Node.js** (optional – only if you want to tweak/build frontend tooling)  
+- **Reverse proxy** (nginx / Apache) – recommended for production  
+- **Process manager** – `systemd` or `pm2` (to run the API server as a service)
+
+Repository layout (simplified):
+
+- `MVP1/snapshot/` – backend API and snapshot logic  
+- `web/` – static frontend (HTML/JS/CSS) for the Control Room  
+- `data/` – snapshot JSON files (e.g. `latest.json`)
+
+---
+
+## 2. Backend API Server
+
+The API server is responsible for:
+
+- talking to GitHub / TeamCity / Jira / Datadog / Rancher (where configured)  
+- generating and updating snapshot files in `data/`  
+- serving snapshot data to the frontend
+
+### 2.1. Install Python dependencies
 
 ```bash
-# Backend dependencies
 cd MVP1/snapshot
 pip install -r requirements.txt
 ```
 
-### 1.2 Konfiguracja zmiennych środowiskowych
+### 2.2. Environment variables
 
-Utwórz plik `.env` w `MVP1/snapshot/`:
+Create a `.env` file in `MVP1/snapshot/` with the integrations you actually use:
 
 ```bash
 # GitHub
@@ -42,24 +52,35 @@ TEAMCITY_TOKEN=your_token
 JIRA_API=https://your-jira.atlassian.net
 JIRA_EMAIL=your@email.com
 JIRA_TOKEN=your_token
+
+# Datadog
+DD_API_KEY=your_key
+DD_APP_KEY=your_key
+DD_SITE=datadoghq.com
+
+# Rancher (optional)
+RANCHER_URL=https://your-rancher.com
+RANCHER_TOKEN=your_token
 ```
 
-(Open-source edition uses GitHub, TeamCity, Jira only. See `.env.example` in repo root.)
+> The open-source/demo setup typically uses GitHub, TeamCity and Jira.  
+> Check any `.env.example` file in the repo for additional options.
 
----
-
-## Krok 2: Uruchomienie API Server
-
-### 2.1 Bezpośrednie uruchomienie (development/testing)
+### 2.3. Run the API server (development / testing)
 
 ```bash
 cd MVP1/snapshot
 python snapshot_api_server.py --port 8001 --interval 30
 ```
 
-### 2.2 Jako systemd service (produkcja)
+- `--port` – HTTP port for the API  
+- `--interval` – how often to refresh snapshot data (seconds)
 
-Utwórz plik `/etc/systemd/system/release-ops-api.service`:
+Stop with `Ctrl+C` when running in a foreground shell.
+
+### 2.4. Run as a `systemd` service (recommended for production)
+
+Create `/etc/systemd/system/release-ops-api.service`:
 
 ```ini
 [Unit]
@@ -79,7 +100,7 @@ RestartSec=10
 WantedBy=multi-user.target
 ```
 
-Aktywacja:
+Enable and start:
 
 ```bash
 sudo systemctl enable release-ops-api
@@ -87,7 +108,7 @@ sudo systemctl start release-ops-api
 sudo systemctl status release-ops-api
 ```
 
-### 2.3 Z PM2 (alternatywa)
+### 2.5. Run with PM2 (alternative)
 
 ```bash
 npm install -g pm2
@@ -97,24 +118,36 @@ pm2 save
 pm2 startup
 ```
 
+This keeps the API alive and restarts it automatically on failure / reboot (after `pm2 startup` is fully configured).
+
 ---
 
-## Krok 3: Frontend
+## 3. Frontend (web UI)
 
-### 3.1 Statyczne pliki
+The UI is a **pure static frontend**:
 
-Frontend to statyczne pliki HTML/JS/CSS. Możesz:
+- `web/index.html` – main Control Room UI  
+- `web/app.js`, `web/styles.css` – logic and styles  
+- It expects API endpoints (and snapshot JSON files) to be reachable under a predictable URL.
 
-**Opcja A: Prosty HTTP server (Python)**
+You can serve it in multiple ways.
+
+### 3.1. Simple HTTP server (local / demo)
 
 ```bash
 cd web
 python start_local_server.py --port 8080
 ```
 
-**Opcja B: Nginx (produkcja)**
+Then open:
 
-Konfiguracja `/etc/nginx/sites-available/release-ops`:
+- `http://localhost:8080/` – Control Room UI
+
+Make sure the API server is running and accessible at the URL configured in `web/app.js` (or `data/latest.json` is present if the UI reads snapshots from disk).
+
+### 3.2. nginx (production)
+
+Example config: `/etc/nginx/sites-available/release-ops`:
 
 ```nginx
 server {
@@ -136,14 +169,14 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
-    # Serve data files
+    # Serve snapshot data if you want it directly
     location /data {
         alias /path/to/release-ops-control-room-main/data;
     }
 }
 ```
 
-Aktywacja:
+Enable site and reload nginx:
 
 ```bash
 sudo ln -s /etc/nginx/sites-available/release-ops /etc/nginx/sites-enabled/
@@ -151,165 +184,95 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-**Opcja C: Apache**
+### 3.3. Apache (alternative)
 
-Konfiguracja wirtualnego hosta:
+Virtual host example:
 
 ```apache
 <VirtualHost *:80>
     ServerName your-domain.com
+
     DocumentRoot /path/to/release-ops-control-room-main/web
 
     <Directory /path/to/release-ops-control-room-main/web>
-        Options Indexes FollowSymLinks
         AllowOverride All
         Require all granted
     </Directory>
 
-    # Proxy API
     ProxyPass /api http://localhost:8001/api
     ProxyPassReverse /api http://localhost:8001/api
+
+    Alias /data /path/to/release-ops-control-room-main/data
 </VirtualHost>
 ```
 
----
+Reload Apache:
 
-## Krok 4: Konfiguracja API Base URL
-
-W produkcji, jeśli frontend i API są na różnych domenach, ustaw w `web/index.html`:
-
-```html
-<script>
-  window.SNAPSHOT_API_BASE = "https://api.your-domain.com";
-</script>
-<script src="app.js"></script>
+```bash
+sudo systemctl reload apache2
 ```
 
-Lub skonfiguruj reverse proxy (jak wyżej) żeby `/api` proxy'owało do backendu.
+---
+
+## 4. Health checks & validation
+
+After deployment, validate:
+
+1. **API health**
+   - `curl http://localhost:8001/health` (or the configured health endpoint, if present)  
+   - Check logs under `MVP1/snapshot/` or `journalctl -u release-ops-api`.
+
+2. **Snapshot generation**
+   - Confirm that `data/latest.json` is being updated periodically.  
+   - Inspect a sample file to verify that projects / environments match your expectations.
+
+3. **UI**
+   - Open `http(s)://your-domain.com/` in a browser.  
+   - Check Overview, Environment view, Release History, Ticket Tracker and Runbooks pages.
 
 ---
 
-## Krok 5: Pierwszy snapshot
+## 5. Upgrades & deployments
 
-Po uruchomieniu API server, pierwszy snapshot uruchomi się automatycznie po interwale (domyślnie 30 minut).
+To roll out a new version of WatchTurm Control Room:
 
-Możesz też uruchomić ręcznie:
+1. Pull new code:
+
+```bash
+cd /path/to/release-ops-control-room-main
+git pull origin main   # or your branch
+```
+
+2. Reinstall backend dependencies if `requirements.txt` changed:
 
 ```bash
 cd MVP1/snapshot
-python snapshot.py
+pip install -r requirements.txt
 ```
 
-Lub przez API:
+3. Restart the API:
 
 ```bash
-curl -X POST http://localhost:8001/api/snapshot/trigger
+sudo systemctl restart release-ops-api
+# or:
+pm2 restart release-ops-api
 ```
 
----
-
-## Krok 6: Monitoring
-
-### Logi
-
-- API server: sprawdź output systemd/PM2
-- Snapshot: logi w `MVP1/snapshot/` (jeśli skonfigurowane)
-
-### Health check
-
-```bash
-curl http://localhost:8001/health
-```
-
-### Status snapshot
-
-```bash
-curl http://localhost:8001/api/snapshot/status
-```
+4. If frontend files changed, reload nginx/Apache (to clear any caches) and refresh the browser.
 
 ---
 
-## Troubleshooting
+## 6. Troubleshooting
 
-### API server nie startuje
+- **UI loads but shows “no data”**  
+  - Check that `data/latest.json` exists and is readable by the web server.  
+  - Verify the API can reach GitHub / CI / Jira (correct tokens and URLs).
 
-- Sprawdź czy port 8001 jest wolny: `netstat -tuln | grep 8001`
-- Sprawdź logi: `journalctl -u release-ops-api -f`
-- Sprawdź `.env` - czy wszystkie wymagane zmienne są ustawione
+- **API keeps crashing**  
+  - Inspect logs: `journalctl -u release-ops-api` or `pm2 logs release-ops-api`.  
+  - Verify all mandatory environment variables are set (especially tokens).
 
-### Frontend nie łączy się z API
+- **CORS / mixed content issues**  
+  - Ensure the frontend and backend are served over the same scheme (HTTP/HTTPS) and host, or configure CORS headers on the API if you intentionally separate them.
 
-- Sprawdź CORS w `snapshot_api_server.py` (powinno być `Access-Control-Allow-Origin: *`)
-- Sprawdź czy API server działa: `curl http://localhost:8001/health`
-- Sprawdź konfigurację `SNAPSHOT_API_BASE` w frontend
-
-### Snapshot nie działa
-
-- Sprawdź czy wszystkie integracje są skonfigurowane (GitHub, TeamCity, etc.)
-- Sprawdź logi snapshot: `python snapshot.py` (uruchom ręcznie)
-- Sprawdź czy `data/` directory istnieje i jest zapisywalne
-
----
-
-## Bezpieczeństwo
-
-### Produkcja
-
-1. **Nie używaj `Access-Control-Allow-Origin: *` w produkcji**
-   - Skonfiguruj konkretne domeny w `snapshot_api_server.py`
-
-2. **Chroń `.env`**
-   - Upewnij się że `.env` nie jest w git
-   - Ustaw odpowiednie uprawnienia: `chmod 600 .env`
-
-3. **HTTPS**
-   - Użyj Let's Encrypt dla SSL
-   - Skonfiguruj nginx/Apache do HTTPS
-
-4. **Firewall**
-   - Otwórz tylko port 80/443 (frontend)
-   - API (8001) powinno być dostępne tylko przez reverse proxy
-
-5. **SSO / uwierzytelnianie**
-   - Aplikacja nie ma wbudowanego logowania. Postaw ją za reverse proxy z SSO (oauth2-proxy, Keycloak Gate).
-   - Szablon konfiguracji: [SSO_SETUP.md](SSO_SETUP.md)
-
----
-
-## Backup
-
-### Dane
-
-Backup katalogu `data/`:
-
-```bash
-tar -czf release-ops-backup-$(date +%Y%m%d).tar.gz data/
-```
-
-### Konfiguracja
-
-Backup plików konfiguracyjnych:
-
-```bash
-tar -czf release-ops-config-$(date +%Y%m%d).tar.gz MVP1/snapshot/.env MVP1/snapshot/configs/
-```
-
----
-
-## Aktualizacja
-
-1. Zatrzymaj service: `sudo systemctl stop release-ops-api`
-2. Zrób backup (jak wyżej)
-3. Pobierz nową wersję kodu
-4. Zaktualizuj zależności: `pip install -r requirements.txt`
-5. Uruchom ponownie: `sudo systemctl start release-ops-api`
-
----
-
-## Wsparcie
-
-W razie problemów:
-- Sprawdź logi systemd/PM2
-- Sprawdź logi nginx/Apache
-- Uruchom snapshot ręcznie dla debugowania
-- Sprawdź `PRODUCTION_READINESS_AUDIT.md` dla znanych problemów
+If something in this guide does not match the current code layout, always trust the **actual repository structure and `snapshot.py` code** first, then adjust the paths/commands accordingly.
