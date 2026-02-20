@@ -11,10 +11,35 @@
 WatchTurm Control Room aggregates deployment data from your CI/CD pipeline and displays it in one dashboard:
 
 - **Pipeline radar** – DEV / QA / UAT / PROD status per project
+  
+
+https://github.com/user-attachments/assets/cedc677a-019d-43a3-be6f-62991ba382a6
+
+
 - **Release history** – tag changes, calendar view, deployer attribution
+  
+
+https://github.com/user-attachments/assets/cdbe9385-92b5-439a-b462-01534901d693
+
+
 - **Ticket Tracker** – Jira tickets with PR evidence and deployment timeline (search by ticket key)
+  
+
+https://github.com/user-attachments/assets/9e5636cc-79a3-41cf-9de5-9d73a4ef93d9
+
+
 - **Runbooks** – Scope checker, Drift checker, Release diff (GitHub branch comparison)
+  
+
+https://github.com/user-attachments/assets/6b5eee94-f583-4b9a-840d-93e8b5afff9a
+
+
 - **Statistics** – deployment frequency, lead time
+  
+
+
+https://github.com/user-attachments/assets/67fd20ff-45ff-4a59-91d9-adcb9ba51f59
+
 
 No agents, no database – just a snapshot generator (Python) and static frontend. Data from GitHub, TeamCity, Jira APIs.
 
